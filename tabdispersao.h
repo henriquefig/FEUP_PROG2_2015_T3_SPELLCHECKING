@@ -148,4 +148,7 @@ unsigned long hash_djbm(const char *chave, int tamanho);
  */
 void mostraTabela(tabela_dispersao *td);
 
+tabela_dispersao* readfiletable(FILE *f);
+element ** tabela_trocados(tabela_dispersao *td,const char * chave);
+
 #endif

@@ -172,7 +172,37 @@ const char* tabela_valor(tabela_dispersao *td, const char *chave)
     }
     return NULL;
 }
+element ** tabela_trocados(tabela_dispersao *td, const char *chave)
+{
+    /* exercicio 1.2 */
+    int count=0;
+    element *elem;
+    if (!td) return NULL;
+    element **aux=calloc(10,sizeof(element *));
 
+
+
+    for (int i = 0; i < td->tamanho; i++)
+    {
+        if (td->elementos[i])
+        {
+            elem = td->elementos[i];
+            while (elem)
+            {
+                if (trocados(elem->obj->chave, chave) == 0)
+                {
+                    aux[count]=elem;
+                    count++;
+                }
+                elem = elem->proximo;
+            }
+        }
+    }
+    if(aux==NULL)
+        return NULL;
+    else
+        return aux;
+}
 int tabela_esvazia(tabela_dispersao *td)
 {
     int i;
@@ -291,4 +321,24 @@ void mostraTabela(tabela_dispersao *td)
         }
     }
     printf("\n");
+}
+tabela_dispersao* readfiletable(FILE *f)
+{
+    char str[100],aux[50];
+    int counter=0;
+    while(fscanf(f,"%s",str)==1)
+        counter++;
+    rewind(f);
+    tabela_dispersao *t=tabela_nova(counter,hash_djbm);
+    counter=0;
+    while(fscanf(f,"%s",str)==1)
+    {
+        str_tolower(str);
+        str[strlen(str)]='\0';
+        sprintf(aux,"%d",counter);
+        tabela_adiciona(t,str,aux);
+        counter++;
+    }
+    //mostraTabela(t);
+    return t;
 }
